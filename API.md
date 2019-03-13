@@ -23,6 +23,7 @@ API URL | 描述 | 例子
 /api/v1/info/:uuid | 返回图片的详细信息 | http://ltfc.net/api/info/561d3c325af63245ad60b483
 /api/v1/downlink/:uuid?uid=:unique_identifier | 返回图片下载信息 | http://ltfc.net/api/downlink/5aebb75154abff7ca62f551c?uid=the_uid_get_from_app_receipt 
 /api/v1/status | 返回当前整体图片状态 | 
+/api/v1/checkversion/:verion | 检查当前版本，推送是否需要升级信息 | 判断当前app版本是否需要升级, :version 提交当前app版本，返回值形如：{"action":"skip"} 或者是 {"action":"upgrade"}, 本请求根据 app_key 判断当前发起请求的是什么app
 
 ## 返回值中的字段说明：
 图片 info 内容：

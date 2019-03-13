@@ -69,15 +69,15 @@ function createTransports(name: string): TransportInstance[] {
 
 /**
  * 创建 winston log, log 输出的所有消息都加上 category 标签
- * @param {string} category 
+ * @param {string} category
  */
 function createWinstonLogger(category: string, transports: TransportInstance[]): LoggerInstance {
     const winstonLogger = new (winston.Logger)({
-        rewriters: [function (level, msg, meta) { 
+        rewriters: [function (level, msg, meta) {
             if ( !meta ) {
                 return { category : category };
             }
-            meta.category = category; 
+            meta.category = category;
             return meta;
         }],
         transports: transports
@@ -104,18 +104,18 @@ const tester: TestDict = {
             level : 'info',   // the level options in logger construct only apply when transport.level is empty
             transports: [
                 new (winston.transports.Console)({
-                    level: 'debug',
+                    level: "debug",
                     formatter: baseFormatter,
                 })
             ]
         });
-        infologger.debug('this is a debug log');
-        infologger.info('this is a  info log');
-    },
+        infologger.debug("this is a debug log");
+        infologger.info("this is a  info log");
+    }
 }
 
 // 常规启动点代码
-import { lunchCli } from './utils'; 
+import { lunchCli } from "./utils";
 lunchCli(__filename, tester, false);
 
 
