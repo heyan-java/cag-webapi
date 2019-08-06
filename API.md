@@ -23,6 +23,9 @@ API URL | 描述 / 例子
 /api/v1/downlink/:uuid?uid=:unique_identifier | 返回图片下载信息<br>例子：http://ltfc.net/api/downlink/5aebb75154abff7ca62f551c?uid=the_uid_get_from_app_receipt
 /api/v1/status | 返回当前整体图片状态
 /api/v1/checkversion/:verion | 检查当前版本，推送是否需要升级信息，判断当前app版本是否需要升级 <br>:version 提交当前app版本，返回值形如：{"action":"skip"} 或者是 {"action":"upgrade"}, 本请求根据 app_key 判断当前发起请求的是什么app
+/api/v1/category | 返回所有分类，用户在分类列表中展示目录，返回值的数据项如下<br>{"tags":"油画","lable":"油画","filter":"age","cover":"/images/head-icon.png","count":0}
+/api/v1/tags/:tags | 返回某个分类下的所有数据，如果数据超过1000张，只返回前1000张，参数： <br>tags：标签条件，按照 cagetory API 中返回的标签条件提交
+
 
 ## 返回值中的字段说明：
 图片 info 内容：
