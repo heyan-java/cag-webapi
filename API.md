@@ -116,6 +116,7 @@ API URL | 需要登陆 | 描述 / 例子
 /api/v1/wx/checksession | 否 | 判断用户登陆状态，如果是正确登陆用户，返回用户信息，如果不是已经注册的用户，则为用户创建一个账户，详见下文接口说明 <br> 参数: <br>  code: 微信登陆返回的session code 
 /api/v1/wx/bindencryptuserinfo | 否 | 对用户数据进行解密，并保存到用户信息中，详见下文接口说明 <br> 参数: <br>  openid: 用户 openid <br> encryptedData: 加密数据 <br>iv: 加密向量
 /api/v1/wx/createorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
+/api/v1/wx/createorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
 
 各个接口详细说明
 ### 4.1
@@ -245,3 +246,14 @@ showMessage('创建用户失败');
         showMessage('请求出错', 'none');
       }
 ```
+
+## 5. 其他用户登陆接口
+用户登陆后，服务器端会通过sid返回当前 session id 给客户端，客户端的每次请求，都需要通过cookied 带上 session id。
+
+API URL | 需要登陆 | 描述 / 例子
+------------ | ------------- | ------------- 
+/api/v1/tourist/sendverifycode/:phone/:code | 否 | 发送验证码到制定手机 <br> 参数: <br>  phone: 电话号码 <br>  code: 计算得出的一个简单保护码 
+/api/v1/tourist/phonelogin/:phone/:verify | 否 | 使用电话号码和验证码登陆 <br> 参数: <br>  phone: 电话号码 <br> verify: 通过短信发送的验证码
+/api/v1/tourist/appleidlogin/:name/:email | 否 | 苹果ID登陆 <br> 参数: <br>  name: 用户名 <br> email: 邮箱号
+/api/v1/tourist/retrive | 是 | 返回当前用户信息
+/api/v1/tourist/update | 是 | 更新当前用户信息
