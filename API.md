@@ -252,9 +252,10 @@ showMessage('创建用户失败');
 
 API URL | 需要登陆 | 描述 / 例子
 ------------ | ------------- | ------------- 
-/api/v1/tourist/sendverifycode/:phone/:code | 否 | 发送验证码到制定手机 <br> 参数: <br>  phone: 电话号码 <br>  code: 计算得出的一个简单保护码 
+/api/v1/tourist/sendverifycode/:phone/:code | 否 | 发送验证码到制定手机 <br> 参数: <br>  phone: 电话号码 <br>  code: 计算得出的一个简单保护码 <br>返回值:  <br>{"R":"Y","M":{code: "已入队", msg: "短信验证码已经发送，请尽快使用" }} , <br>{"R":"Y","M":{code: '当前验证码有效', msg: "上次发送的验证码依然有效，请继续使用"}} ,  <br>{"R":"N","M":{code:"发送错误", msg:"服务器端发送错误"}} , 其中msg内容可以直接展示给用户
 /api/v1/tourist/phonelogin/:phone/:verify | 否 | 使用电话号码和验证码登陆 <br> 参数: <br>  phone: 电话号码 <br> verify: 通过短信发送的验证码
 /api/v1/tourist/appleidlogin | 否 | 苹果ID登陆 <br> 参数: <br>  appleid: 苹果id <br> data: json格式的数据提，内容例子：{"name":"shuangtao","email":"test@test.com"}，<br>整个请求体的格式如下：{ appleid:"ap000001",  "data":{"name":"shuangtao","email":"test@test.com"}} <br>可以使用如下shell脚本进行测试：<br>curl http://dev.ltfc.net:4000/api/v1/tourist/appleidlogin -d "payload=%7B%22appleid%22%3A%22ap000001%22%2C%22data%22%3A%7B%22name%22%3A%22shuangtao%22%2C%22email%22%3A%22test%40test.com%22%7D%7D"
 /api/v1/tourist/umengwxlogin | 否 | 友盟微信登陆 <br> 参数: <br>  data: json格式的数据提，内容例子：{ data: {     "uid" : "wx0000001", "openid": "opne_test_id_00001", "accessToken": "access_test_token", "refreshToken": "refresh_test_token", "expiration": "2019-11-11", "name": "李双涛", "iconurl": "http://cag.ltfc.net/snap/5dcd84af0dccd726b7cc76d3/cv_640x280_1573785877403.jpeg", "gender": "男", "originalResponse": "xxxxxxxx"} }，<br> <br>可以使用如下shell脚本进行测试：<br>curl http://dev.ltfc.net:4000/api/v1/tourist/umengwxlogin -d "payload=%7B%22data%22%3A%7B%22uid%22%3A%22wx0000001%22%2C%22openid%22%3A%22opne_test_id_00001%22%2C%22accessToken%22%3A%22access_test_token%22%2C%22refreshToken%22%3A%22refresh_test_token%22%2C%22expiration%22%3A%222019-11-11%22%2C%22name%22%3A%22%E6%9D%8E%E5%8F%8C%E6%B6%9B%22%2C%22iconurl%22%3A%22http%3A%2F%2Fcag.ltfc.net%2Fsnap%2F5dcd84af0dccd726b7cc76d3%2Fcv_640x280_1573785877403.jpeg%22%2C%22gender%22%3A%22%E7%94%B7%22%2C%22originalResponse%22%3A%22xxxxxxxx%22%7D%7D"
 /api/v1/tourist/retrive | 是 | 返回当前用户信息
-/api/v1/tourist/update | 是 | 更新当前用户信息
+/api/v1/tourist/update | 是 | 更新当前用户信息  
+/api/v1/tourist/updatephone | 是 | 更新当前用户更新电话信息，参数<br>verify: 验证码， <br>phone : 电话号码，<br> 注意:参数内容通过请求题提传递，和sendverifycode不一样
