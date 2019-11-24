@@ -262,7 +262,7 @@ API URL | 需要登陆 | 描述 / 例子
 
 UserInfo的结构如下
 ```javascript
-      UserInfo： {
+UserInfo： {
     // 用户编号
     _id : String, 
     // ---- 基本信息 ----
@@ -285,7 +285,7 @@ UserInfo的结构如下
     downloadCnt : { type: Number, default: 0 },
     // 当前拥有的下载次数，普通用户有3次下载机会，华艺通用户每个月有30次下载机会
     // 每月自动刷新下载机会，如果下载机会为0，则不允许下载，目前只用于PC端
-    downloadTickCnt : { type: Number, default: 3},
+    downloadTicketCnt : { type: Number, default: 3},
     // 创建时间
     ctime: Date,
     // 最后更新时间
