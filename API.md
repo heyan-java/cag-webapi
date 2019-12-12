@@ -492,3 +492,95 @@ URL: /api/v1/tourist/compare_extend_vip
 
 
 
+## 6. 收藏相关API
+用户登陆后，服务器端会通过sid返回当前 session id 给客户端，客户端的每次请求，都需要通过cookied 带上 session id。
+
+API URL | 需要登陆 | 描述 / 例子
+------------ | ------------- | ------------- 
+/api/v1/note/pin | 是 | 加入收藏夹，
+/api/v1/note/batchpin | 是 | 批量加入收藏夹
+/api/v1/note/check/:paintingId | 是 | 检查某个图片是否在收藏夹中
+/api/v1/note/list | 是 | 列出收藏夹中的所有作品
+/api/v1/note/count | 是 | 收藏夹中的所有作品数量
+/api/v1/note/delete/:paintingId | 是 | 从收藏夹移除
+/api/v1/footprint/list | 是 | 列出访问足迹
+/api/v1/footprint/count | 是 | 足迹数量
+
+
+### 6.1 加入收藏夹
+URL: /api/v1/note/pin
+<pre>
+参数：
+  paintingId: 目标图片ID
+返回值：
+{ R:'Y', M: {} }
+错误的返回值如下：
+{ R:'N', M: {msg: "错误提示"} }
+</pre>
+
+### 6.2 加入收藏夹
+URL: /api/v1/note/batchpin
+<pre>
+参数：
+  pins: 批量列表，形如： { pins: [ {paintingId: '11111'}, {paintingId: '22222'}, {paintingId: '333333'},] }
+返回值：
+{ R:'Y', M: {} }
+错误的返回值如下：
+{  R:'N', M: {msg: "错误提示"} }
+</pre>
+
+
+### 6.3 检查某个图片是否在收藏夹中
+URL: /api/v1/note/check/:paintingId
+<pre>
+参数：
+  在URL中拼接 paintingId 即可
+返回值：
+  { R:'Y', M: { doc:true } }
+  或者是 { R:'Y', M: { doc:false } }
+</pre>
+
+
+### 6.4 /api/v1/note/list
+URL: /api/v1/note/list
+<pre>
+ 参数：
+ page: 当前显示的页数
+ cond: 查询条件
+ sort: 返回值中的排序字段
+ 例子：{"cond":{},"page":{"skip":0,"limit":20},"sort":{"_id":1}}
+返回值：
+  {"R":"Y","M":{"docs":[
+    {
+      "_id":"5dd813d09f601784c1015f3c",
+      "paintingId":"5dc1b16181627035162a7a76",
+      "touristId":"5dd6b219a0d6d7214a05d6ea",
+      "ctime":"2019-11-22T16:58:56.866Z",
+      "title":"夏珪（传）《秋江渔乐图》",
+      "utime":"2019-11-22T16:58:56.866Z"},
+    ...]}}
+</pre>
+
+
+### 6.5 收藏夹中的所有作品数量
+URL: /api/v1/note/count
+<pre>
+参数：
+  cond: 查询条件
+  例子：{"cond":{}}
+返回值：
+  {"R":"Y","M":{ count: count }}
+错误的返回值如下：
+</pre>
+
+### 5.11 比较并延长订阅时间
+URL: /api/v1/note/delete/:paintingId
+<pre>
+参数：
+paintingId: URL 中拼接 paintingId
+返回值：
+{"R":"Y","M":{ count: count }}
+错误的返回值如下：
+{ R:'N', M: {msg: "错误提示"} }
+</pre>
+
