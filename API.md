@@ -7,6 +7,24 @@ API: api 结构名称，具体内容参加下表
 APP_KEY: app标识，用来唯一标识一个app，APP_KEY需要与APP_TOKEN匹配，申请之后不会变化
 APP_TOKEN: app令牌，后台为每个app生成一个唯一的令牌，令牌错误将不能访问 api 接口
 
+返回值：
+由于历史原因，目前的API的返回值有两种类型。
+
+### 形式一： 
+形式一是前期版本，直接返回值对象，例如：/api/v1/essence，返回的是精选馆的图片列表
+### 形式二：
+形式二是标准化后的接口，返回一个标准对象，形如：
+{"R":"Y","M":{...},"C":"CODE"} 
+其中的各个字段意思如下：
+#### R：调用结果标记，调用正常返回"Y"，调用错误返回"N"
+#### M：调用返回对象，一般是一个字符串，或者是返回值对象
+M 对象的返回内容参考API的手册说明，一般来说经常会包含以下3项：{ code, doc, msg } 
+##### code: 标记某个返回状态，例如 code: '已入队'
+##### doc: 存放返回对象，具体对象结构参考API手册
+##### msg: 存放描述性的文字，一般用于展示给前端用户
+
+#### C：标准错误码。 定义：'UNAUTHOR': 未登陆
+
 ## 2. 各个板块读取数据API
 API URL | 描述 / 例子
 ------------ | ------------- 
@@ -252,19 +270,76 @@ showMessage('创建用户失败');
 
 API URL | 需要登陆 | 描述 / 例子
 ------------ | ------------- | ------------- 
-/api/v1/tourist/sendverifycode/:phone/:code | 否 | 发送验证码到制定手机 <br> 参数: <br>  phone: 电话号码 <br>  code: 计算得出的一个简单保护码 <br>返回值:  <br>{"R":"Y","M":{code: "已入队", msg: "短信验证码已经发送，请尽快使用" }} , <br>{"R":"Y","M":{code: '当前验证码有效', msg: "上次发送的验证码依然有效，请继续使用"}} ,  <br>{"R":"N","M":{code:"发送错误", msg:"服务器端发送错误"}} , 其中msg内容可以直接展示给用户
-/api/v1/tourist/phonelogin/:phone/:verify | 否 | 使用电话号码和验证码登陆 <br> 参数: <br>  phone: 电话号码 <br> verify: 通过短信发送的验证码,<br>返回值：成功返回：{"R":"Y","M":{userInfo: ... }} , 失败返回：{"R":"N","M":{msg:"验证码错误"}} 
-/api/v1/tourist/appleidlogin | 否 | 苹果ID登陆 <br> 参数: <br>  appleid: 苹果id <br> data: json格式的数据提，内容例子：{"name":"shuangtao","email":"test@test.com"}，<br>整个请求体的格式如下：{ appleid:"ap000001",  "data":{"name":"shuangtao","email":"test@test.com"}} <br>可以使用如下shell脚本进行测试：<br>curl http://dev.ltfc.net:4000/api/v1/tourist/appleidlogin -d "payload=%7B%22appleid%22%3A%22ap000001%22%2C%22data%22%3A%7B%22name%22%3A%22shuangtao%22%2C%22email%22%3A%22test%40test.com%22%7D%7D"
-/api/v1/tourist/umengwxlogin | 否 | 友盟微信登陆 <br> 参数: <br>  data: json格式的数据提，内容例子：{ data: {     "uid" : "wx0000001", "openid": "opne_test_id_00001", "accessToken": "access_test_token", "refreshToken": "refresh_test_token", "expiration": "2019-11-11", "name": "李双涛", "iconurl": "http://cag.ltfc.net/snap/5dcd84af0dccd726b7cc76d3/cv_640x280_1573785877403.jpeg", "gender": "男", "originalResponse": "xxxxxxxx"} }，<br> <br>可以使用如下shell脚本进行测试：<br>curl http://dev.ltfc.net:4000/api/v1/tourist/umengwxlogin -d "payload=%7B%22data%22%3A%7B%22uid%22%3A%22wx0000001%22%2C%22openid%22%3A%22opne_test_id_00001%22%2C%22accessToken%22%3A%22access_test_token%22%2C%22refreshToken%22%3A%22refresh_test_token%22%2C%22expiration%22%3A%222019-11-11%22%2C%22name%22%3A%22%E6%9D%8E%E5%8F%8C%E6%B6%9B%22%2C%22iconurl%22%3A%22http%3A%2F%2Fcag.ltfc.net%2Fsnap%2F5dcd84af0dccd726b7cc76d3%2Fcv_640x280_1573785877403.jpeg%22%2C%22gender%22%3A%22%E7%94%B7%22%2C%22originalResponse%22%3A%22xxxxxxxx%22%7D%7D"
+/api/v1/tourist/sendverifycode/:phone/:code | 否 | 发送验证码到制定手机
+/api/v1/tourist/phonelogin/:phone/:verify | 否 | 使用电话号码和验证码登陆 
+/api/v1/tourist/appleidlogin | 否 | 苹果ID登陆 
+/api/v1/tourist/umengwxlogin | 否 | 友盟微信登陆 
 /api/v1/tourist/retrive | 是 | 返回当前用户信息
 /api/v1/tourist/update | 是 | 更新当前用户信息  
-/api/v1/tourist/updatephone | 是 | 更新当前用户更新电话信息，参数<br>verify: 验证码， <br>phone : 电话号码，<br> 注意:参数内容通过请求题提传递，和sendverifycode不一样
+/api/v1/tourist/ubind | 否 | 解绑微信或者是苹果信息
+/api/v1/tourist/updateumengwx | 是 | 更新umeng微信信息
+/api/v1/tourist/updateappleinfo | 是 | 更新umeng微信信息更新苹果信息
+/api/v1/tourist/compare_extend_vip | 是 | 延长订阅时间
 
-UserInfo的结构如下
+
+### 5.1 发送验证码到手机
+URL: /api/v1/tourist/sendverifycode/:phone/:code
+<pre>
+参数: 
+  phone: 电话号码 
+  code: 保护码
+返回值:  
+{"R":"Y","M":{code: "已入队", msg: "短信验证码已经发送，请尽快使用" }} , 
+{"R":"Y","M":{code: '当前验证码有效', msg: "上次发送的验证码依然有效，请继续使用"}} ,  
+{"R":"N","M":{code:"发送错误", msg:"服务器端发送错误"}} , 其中msg内容可以直接展示给用户
+</pre>
+
+
+### 5.2 用电话号码和验证码登陆
+URL: /api/v1/tourist/phonelogin/:phone/:verify
+<pre>
+ 参数: 
+  phone: 电话号码 
+  verify: 通过短信发送的验证码,
+返回值：成功返回：{"R":"Y","M":{userInfo: ... }} , 失败返回：{"R":"N","M":{msg:"验证码错误"}} 
+</pre>
+
+### 5.3 苹果ID登陆
+URL: /api/v1/tourist/appleidlogin
+<pre>
+参数: 
+  appleid: 苹果id 
+  data: json格式的数据提，内容例子：{"name":"shuangtao","email":"test@test.com"}，
+</pre>
+整个请求体的格式如下：
+> { appleid:"ap000001",  "data":{"name":"shuangtao","email":"test@test.com"}} 
+
+可以使用如下shell脚本进行测试：
+> curl http://dev.ltfc.net:4000/api/v1/tourist/appleidlogin -d "payload=%7B%22appleid%22%3A%22ap000001%22%2C%22data%22%3A%7B%22name%22%3A%22shuangtao%22%2C%22email%22%3A%22test%40test.com%22%7D%7D"
+
+### 5.4 友盟微信登陆 
+URL: /api/v1/tourist/umengwxlogin
+<pre>
+  参数: 
+   data: json格式的数据提
+</pre>
+内容例子：
+> { data: {     "uid" : "wx0000001", "openid": "opne_test_id_00001", "accessToken": "access_test_token", "refreshToken": "refresh_test_token", "expiration": "2019-11-11", "name": "李双涛", "iconurl": "http://cag.ltfc.net/snap/5dcd84af0dccd726b7cc76d3/cv_640x280_1573785877403.jpeg", "gender": "男", "originalResponse": "xxxxxxxx"} }
+
+ 可以使用如下shell脚本进行测试：
+> curl http://dev.ltfc.net:4000/api/v1/tourist/umengwxlogin -d "payload=%7B%22data%22%3A%7B%22uid%22%3A%22wx0000001%22%2C%22openid%22%3A%22opne_test_id_00001%22%2C%22accessToken%22%3A%22access_test_token%22%2C%22refreshToken%22%3A%22refresh_test_token%22%2C%22expiration%22%3A%222019-11-11%22%2C%22name%22%3A%22%E6%9D%8E%E5%8F%8C%E6%B6%9B%22%2C%22iconurl%22%3A%22http%3A%2F%2Fcag.ltfc.net%2Fsnap%2F5dcd84af0dccd726b7cc76d3%2Fcv_640x280_1573785877403.jpeg%22%2C%22gender%22%3A%22%E7%94%B7%22%2C%22originalResponse%22%3A%22xxxxxxxx%22%7D%7D"
+
+### 5.5 返回当前用户信息
+URL: /api/v1/tourist/retrive
+<pre>
+  参数: 无
+</pre>
+
+返回一个UserInfo结构体，UserInfo的主要字段解释如下：
 ```javascript
 UserInfo： {
-    // 用户编号
-    _id : String, 
+    // 用户唯一编号，唯一不变的用户ID
+    _id : String,
     // ---- 基本信息 ----
     // 访客ID，用于在web页面上登陆的访客的唯一标识，APP不用关注
     userid : String,
@@ -278,22 +353,13 @@ UserInfo： {
     email : String,
     // 电话号码
     phone: String,
-
-    // 访问计数器
-    accessCnt : { type : Number, default : 0 }, 
     // 下载数据次数
     downloadCnt : { type: Number, default: 0 },
     // 当前拥有的下载次数，普通用户有3次下载机会，华艺通用户每个月有30次下载机会
     // 每月自动刷新下载机会，如果下载机会为0，则不允许下载，目前只用于PC端
     downloadTicketCnt : { type: Number, default: 3},
-    // 创建时间
-    ctime: Date,
-    // 最后更新时间
-    utime: Date,
     // 用户角色，当前包括: 游客 / 专业用户
     role : { type : String, default : ROLE_TOURIST },
-    // 是否不允许用户登录
-    blocked : { type : Boolean , default : false },
 
     // 微信 openid，这个openid 是用户使用微信小程序的openid
     // deprecated: 这个openid 只是小程序的 openid，不能作为
@@ -311,34 +377,6 @@ UserInfo： {
     wx_country: String,
     wx_avatarUrl: String,
 
-    // app 调用友盟登陆时的返回信息
-    wx_access_token : String,
-    wx_refresh_token : String,
-    wx_expires_in: Number,
-    // 调用 wx oauth2 登陆时的返回信息
-    // oauth2 是用户在web上登陆时使用的数据
-    wx_oauth2 : {
-      // 这个openid是用户在网站登陆的openid
-      openid: String,
-      access_token: String,
-      expires_in: Number,
-      refresh_token: String,
-      scope: String,
-    },
-
-    // 友盟 sdk 提交的注册信息
-    umeng_info : {
-        uid: String,
-        openid: String,
-        accessToken: String,
-        refreshToken: String,
-        expiration: String,
-        name: String,
-        iconurl: String,
-        gender: String,
-        originalResponse: String,
-    },
-
     // 苹果相关的注册信息
     apple_id: String,
     apple_nickName: String,
@@ -350,3 +388,107 @@ UserInfo： {
     vip_expire_date: Date,
 }
 ```
+
+### 5.6 更新当前用户信息
+更新用户的一些基本信息，例如头像，昵称等，重要信息不能通过这个接口更新，比如绑定微信，电话等，都有专用的接口
+URL: /api/v1/tourist/update
+<pre>
+ 参数: 
+   data: json格式的数据体，和UserInfo的结构一样
+</pre>
+
+### 5.7 更新当前用户更新电话信息
+URL: /api/v1/tourist/updatephone
+<pre>
+参数
+  verify: 验证码，
+  phone : 电话号码，
+</pre>
+注意:参数内容通过请求题提传递，和 sendverifycode 不一样
+
+
+### 5.8 解绑微信或者是苹果信息
+URL: /api/v1/tourist/ubind
+<pre>
+参数：
+  data: 要解除绑定的类型，可以是'apple' ， 'weixin'
+返回值：
+正常调用的返回值如下
+{
+  R:'Y',
+  M: { doc: userInfo.toObject() }
+}
+
+错误的返回值如下：
+{
+  R:'N',
+  M: { doc: userInfo.toObject() }
+}
+</pre>
+
+
+
+### 5.9 更新umeng微信信息更新苹果信息
+URL: /api/v1/tourist/updateappleinfo
+<pre>
+参数：
+  appleid: 新的苹果ID
+  data: {name, email}
+返回值：
+正常调用的返回值如下
+{
+  R:'Y',
+  M: { doc: userInfo.toObject() }
+}
+
+错误的返回值如下：
+{
+  R:'N',
+  M: {msg: "该苹果账号已经绑定到其他用户，不能重复绑定"}
+}
+</pre>
+
+
+### 5.10 更新umeng微信信息
+URL: /api/v1/tourist/updateumengwx
+<pre>
+ 参数：
+  data: umeng登陆的时候返回的信息
+返回值：
+正常调用的返回值如下
+{
+  R:'Y',
+  M: { doc: userInfo.toObject() }
+}
+
+错误的返回值如下：
+{
+  R:'N',
+  M: {msg: "该微信已经绑定到其他用户，不能重复绑定"}
+}
+</pre>
+
+
+
+### 5.11 比较并延长订阅时间
+URL: /api/v1/tourist/compare_extend_vip
+<pre>
+ 参数：
+  date: 待延长的时间
+  data: 其他附加信息
+返回值：
+正常调用的返回值如下
+{
+  R:'Y',
+  M: { vip_expire_date: current.vip_expire_date }
+}
+
+错误的返回值如下：
+{
+  R:'N',
+  M: {msg: "错误提示"}
+}
+</pre>
+
+
+
