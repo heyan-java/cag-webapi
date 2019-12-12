@@ -573,7 +573,7 @@ URL: /api/v1/note/count
 错误的返回值如下：
 </pre>
 
-### 5.11 比较并延长订阅时间
+### 5.11 移除收藏夹中的图片
 URL: /api/v1/note/delete/:paintingId
 <pre>
 参数：
