@@ -112,7 +112,8 @@ http://ltfc.net/imglite/:uuid | 微博或者其他社交媒体分享时使用的
 参数：
 
     uuid: 其中uuid使用从API中拉到的_id字段
-    view: iOS使用webview_ios，Android使用web view_andorid
+    view: iOS使用webview_ios，Android使用webview_andorid
+    act: access token,用户login后，可以拿到一个 cag_access_token，这个 token 用于透传用户信息到 webview 中，让 webview 知道当前的用户信息
 备注: 当view参数不为空时，缩放按钮，评论按钮都会隐藏。
 
 /imglite.html?uuid=:uuid&view=webview_ios#uuid=：uuid&view=webview_ios
@@ -573,7 +574,7 @@ URL: /api/v1/note/count
 错误的返回值如下：
 </pre>
 
-### 5.11 移除收藏夹中的图片
+### 6.11 移除收藏夹中的图片
 URL: /api/v1/note/delete/:paintingId
 <pre>
 参数：
@@ -584,3 +585,47 @@ paintingId: URL 中拼接 paintingId
 { R:'N', M: {msg: "错误提示"} }
 </pre>
 
+
+## 7. 题跋信息相关API
+查询和图片相关的用户题跋信息
+API URL | 需要登陆 | 描述 / 例子
+------------ | ------------- | ------------- 
+/api/v1/suggestion/create | 是 | 创建一条题跋
+/api/v1/suggestion/delete | 是 | 删除题跋，只能删除自己发布的题跋，不能删除别人的
+/api/v1/suggestion/list | 否 | 列出画作相关的所有题跋，以时间先后排序，先发的题跋在前
+
+
+### 7.1 创建建议
+URL: /api/v1/suggestion/create
+<pre>
+参数：
+paintingId: 图片资源ID
+content: 题跋内容
+返回值：
+{"R":"Y","M":{}}
+错误的返回值如下：
+{ R:'N', M: {msg: "错误提示"} }
+</pre>
+
+### 7.2 创建建议
+URL: /api/v1/suggestion/delete
+<pre>
+参数：
+uuid: 题跋ID
+返回值：
+{"R":"Y","M":{}}
+错误的返回值如下：
+{ R:'N', M: {msg: "错误提示"} }
+</pre>
+
+### 7.2 创建建议
+URL: /api/v1/suggestion/list
+<pre>
+参数：
+paintingId: 图片资源ID
+返回值：
+{"R":"Y","M":{ docs: suggestions }}
+  其中suggestion是一个列表，具体字段参考后端代码
+错误的返回值如下：
+{ R:'N', M: {msg: "错误提示"} }
+</pre>
