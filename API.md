@@ -29,16 +29,16 @@ M 对象的返回内容参考API的手册说明，一般来说经常会包含以
 API URL | 描述 / 例子
 ------------ | ------------- 
 /api/v1/essence | 精选馆数据  
-/api/v1/age/:age/:author | 年代馆数据 <br>例子：http://api/ltfc.net/api/age/%E5%AE%8B/%E6%9D%8E%E5%85%AC%E9%BA%9F?app=sample&token=SMP_APP_TOKEN
+/api/v1/age/:age/:author | 年代馆数据 <br>例子：https://api.ltfc.net/api/vi/age/%E5%AE%8B/%E6%9D%8E%E5%85%AC%E9%BA%9F?app=sample&token=SMP_APP_TOKEN
 /api/v1/modern | 当代馆数据 
 /api/v1/recent | 新发布数据列表  
 /api/v1/mylove | 铭心绝品数据列表 
 /api/v1/tag/:tag | 显示分类数据 例子tag: 书法，绘画，工笔
-/api/v1/search/:key | 查询数据列表 <br>例子： http://ltfc.net/api/search/%E6%9D%8E%E5%85%AC%E9%BA%9F
-/api/v1/outline.json | 年代列表 <br>例子：http://ltfc.net/cagstore/outline.json
+/api/v1/search/:key | 查询数据列表 <br>例子： https://ltfc.net/api/v1/search/%E6%9D%8E%E5%85%AC%E9%BA%9F
+/api/v1/outline.json | 年代列表 <br>例子：https://ltfc.net//api/v1/outline.json
 /api/v1/hotsearch | 热搜词列表
 /api/v1/info/:uuid | 返回图片的详细信息 <br>例子： http://ltfc.net/api/info/561d3c325af63245ad60b483
-/api/v1/downlink/:uuid?uid=:unique_identifier | 返回图片下载信息<br>例子：http://ltfc.net/api/downlink/5aebb75154abff7ca62f551c?uid=the_uid_get_from_app_receipt
+/api/v1/downlink/:uuid?uid=:unique_identifier | 返回图片下载信息<br>例子：https://api.ltfc.net/api/v1/downlink/5aebb75154abff7ca62f551c?uid=the_uid_get_from_app_receipt
 /api/v1/status | 返回当前整体图片状态
 /api/v1/checkversion/:verion | 检查当前版本，推送是否需要升级信息，判断当前app版本是否需要升级 <br>:version 提交当前app版本，返回值形如：{"action":"skip"} 或者是 {"action":"upgrade"}, 本请求根据 app_key 判断当前发起请求的是什么app
 /api/v1/category | 返回所有分类，用户在分类列表中展示目录，返回值的数据项如下<br>{"tags":"油画","lable":"油画","filter":"age","cover":"/images/head-icon.png","count":0}
