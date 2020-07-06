@@ -164,7 +164,7 @@ API URL | 需要登陆 | 描述 / 例子
 /api/v1/wx/checksession | 否 | 判断用户登陆状态，如果是正确登陆用户，返回用户信息，如果不是已经注册的用户，则为用户创建一个账户，详见下文接口说明 <br> 参数: <br>  code: 微信登陆返回的session code 
 /api/v1/wx/bindencryptuserinfo | 否 | 对用户数据进行解密，并保存到用户信息中，详见下文接口说明 <br> 参数: <br>  openid: 用户 openid <br> encryptedData: 加密数据 <br>iv: 加密向量
 /api/v1/wx/createorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
-/api/v1/wx/createorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
+/api/v1/wx/createnativeorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
 
 各个接口详细说明
 ### 4.1
