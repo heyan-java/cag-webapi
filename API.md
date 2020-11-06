@@ -30,6 +30,7 @@ API URL | 描述 / 例子
 ------------ | ------------- 
 /api/v1/essence | 精选馆数据  
 /api/v1/age/:age/:author | 年代馆数据 <br>例子：https://api.ltfc.net/api/vi/age/%E5%AE%8B/%E6%9D%8E%E5%85%AC%E9%BA%9F?app=sample&token=SMP_APP_TOKEN
+/api/v1.1/age/:age/:author | 按照标准格式返回的年代馆数据，v1版本的
 /api/v1/modern | 当代馆数据 
 /api/v1/recent | 新发布数据列表  
 /api/v1/mylove | 铭心绝品数据列表 
@@ -165,6 +166,8 @@ API URL | 需要登陆 | 描述 / 例子
 /api/v1/wx/bindencryptuserinfo | 否 | 对用户数据进行解密，并保存到用户信息中，详见下文接口说明 <br> 参数: <br>  openid: 用户 openid <br> encryptedData: 加密数据 <br>iv: 加密向量
 /api/v1/wx/createorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
 /api/v1/wx/createnativeorder | 是 | 调用微信支付，创建订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
+/api/v1/wx/createapporder | 是 | 调用微信支付，创建用于APP支付的订单，并返回订单号给客户端，详见下文接口说明 <br> 参数: <br>  type: 订单类型
+/api/v1/wx/getappordertype | 是 | 返回APP端支持的支付类型 <br> 参数: 无
 
 各个接口详细说明
 ### 4.1
@@ -293,6 +296,41 @@ showMessage('创建用户失败');
       } else {
         showMessage('请求出错', 'none');
       }
+```
+
+### 4.3
+/api/v1/wx/createapporder
+说明:  
+调用微信支付服务，创建一个新订单，并返回支付信息，供前端拉起收银台  
+注意：用户需要是已经登陆的状（调用过checksession），http client还需要支持session
+
+参数:  
+* type: 支付类型, 目前支持三种：CAG1 | CAG2 | TEST
+  * CAG1: 3个月
+  * CAG2: 12个月
+  * TEST: 测试用
+
+返回:
+* 创建成功，返回订单信息，供拉起收银台
+* 创建失败返回出错信息
+
+### 4.3
+/api/v1/wx/getappordertype
+说明:  
+返回Android客户端上支持的支付类型
+
+参数: 无
+
+例子:
+
+请求：http://ltfc.net/api/v1/wx/getappordertype
+```JSON
+  {
+    "R":"Y",
+    "M":[
+      {"type":"CAG4","body":"中华珍宝馆“华艺通”会员-12个月（APP）","total_fee":4800},
+      {"type":"CAG5","body":"中华珍宝馆“华艺通”会员-3个月（APP）","total_fee":1500}
+    ]}
 ```
 
 ## 5. 其他用户登陆接口
